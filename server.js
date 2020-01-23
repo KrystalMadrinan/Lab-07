@@ -14,16 +14,22 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 
 // route syntax = app.<operation>('route', callback);
+// home page for server testing
 app.get('/', (request, response) => {
   response.send('home page!!!!');
 });
 
+// Routes
+app.get('/location', locationHandler);
+// app.get('/weather', weatherHandler);
+// app.get('/yelp', yelpHandler);
+// app.get('/events', eventsHandler);
+// app.get('/movies', moviesHandler);
 
 // route for location/map
-app.get('/location', (request, response) => {
+function locationHandler(request, response) {
   try {
     // //Getting info for object
-
     const city = request.query.city;
     let url = `https://us1.locationiq.com/v1/search.php?key=${process.env.GEOCODE_API_KEY}&q=${city}&format=json&limit=1'`;
 
@@ -41,7 +47,7 @@ app.get('/location', (request, response) => {
 
   }
 
-});
+}
 //routes above function below
 
 //creating object
@@ -58,13 +64,14 @@ function Location(city, geoData) {
 app.get('/weather', (request, response) => {
   try {
     const weatherData = require('./darksky.json');
-    const forecastArray = [];
-    weatherData.daily.data.forEach(darkSky => {
-      const time = new Date(darkSky.time *1000).toString().slice(0, 15);
-      const forecast = darkSky.summary;
-      const weatherObj = new Weather(time, forecast);
-      forecastArray.push(weatherObj);
-    });
+    const forecastArray = weatherData.daily.data.map(object => new Weather(object));
+    // weatherData.daily.data.forEach(darkSky => {
+    // const time = new Date(darkSky.time *1000).toString().slice(0, 15);
+    // const forecast = darkSky.summary;
+    // const weatherObj = new Weather(time, forecast);
+    // forecastArray.push(weatherObj);
+    // });
+
     response.send(forecastArray);
 
   } catch (error) {
@@ -76,9 +83,9 @@ app.get('/weather', (request, response) => {
 //constructor for weather
 
 
-function Weather(forecast, time) {
-  this.forecast = forecast;
-  this.time = time;
+function Weather(weatherObj) {
+  this.forecast = weatherObj.summary
+  this.time = new Date(weatherObj.time *1000).toString().slice(0, 15);
 }
 
 function errorHandler(error, request, response) {
