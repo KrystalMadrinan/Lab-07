@@ -26,8 +26,6 @@ app.get('/weather', weatherHandler);
 // app.get('/yelp', yelpHandler);
 // app.get('/movies', moviesHandler);
 
-
-// Location Functions
 function locationHandler(request, response) {
   try {
     // //Getting info for object
@@ -46,6 +44,7 @@ function locationHandler(request, response) {
     errorHandler('it went wrong.', request, response);
   }
 }
+
 
 // Location Object Constructor
 function Location(city, geoData) {
@@ -70,6 +69,7 @@ function weatherHandler(request, response) {
         const forecastArray = data.body.daily.data.map(object => new Weather(object));
         response.send(forecastArray);
       })
+
 
   } catch (error) {
     errorHandler('something went wrong', request, response);
