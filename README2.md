@@ -36,7 +36,17 @@ Finish time: 3:00
 Actual time needed to complete: ~4 hours 
 
 
+## Lab-07
 
+Number and name of feature: #1 Data Formatting
+
+Estimate of time needed to complete: _____
+
+Start time: _____
+
+Finish time: _____
+
+Actual time needed to complete: _____
 
 
 Number and name of feature: #2 See Location data 
@@ -48,22 +58,6 @@ Start time: 3:09
 Finish time: 4:07
 
 Actual time needed to complete: 58 minutes 
-
-
-
-
-Number and name of feature: ________________________________
-
-Estimate of time needed to complete: _____
-
-Start time: _____
-
-Finish time: _____
-
-Actual time needed to complete: _____
-
-
-
 
 Number and name of feature: ________________________________
 
