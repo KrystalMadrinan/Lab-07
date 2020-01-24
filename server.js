@@ -22,7 +22,7 @@ app.get('/', (request, response) => {
 
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
-// app.get('/events', eventsHandler);
+app.get('/events', eventsHandler);
 // app.get('/yelp', yelpHandler);
 // app.get('/movies', moviesHandler);
 
@@ -87,6 +87,40 @@ function Weather(weatherObj) {
 
 function errorHandler(error, request, response) {
   response.status(500).send(error);
+}
+
+
+
+// handler for events
+
+function eventsHandler(request, response) {
+  try {
+    const latitude = request.query.latitude;
+    const longitude = request.query.longitude;
+    let eventurl = `http://api.eventful.com/json/events/search?app_key=${process.env.EVENTFUL_API_KEY}&keywords=books&where=${latitude},${longitude}&within=7&date=Future`
+    console.log(eventurl);
+
+    superagent.get(eventurl)
+      .then(data => {
+        console.log('test');
+        let obj = JSON.parse(data.text);
+
+        const eventsarray = obj.events.event.map(object => new Event(object));
+        response.send(eventsarray);
+      })
+  } catch (error) {
+    errorHandler('something went wrong', request, response);
+  }
+}
+
+
+// constructor for events
+
+function Event(eventsObj) {
+  // this.link = eventsObj.events.event.url;
+  this.name = eventsObj.events.event.title;
+  this.event_date = eventsObj.events.event.start_time;
+  this.summary = eventsObj.events.event.description;
 }
 
 // Ensure the server is listening for requests
