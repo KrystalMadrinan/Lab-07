@@ -69,8 +69,6 @@ function weatherHandler(request, response) {
         const forecastArray = data.body.daily.data.map(object => new Weather(object));
         response.send(forecastArray);
       })
-
-
   } catch (error) {
     errorHandler('something went wrong', request, response);
   }
@@ -85,9 +83,6 @@ function Weather(weatherObj) {
   this.time = new Date(weatherObj.time *1000).toString().slice(0, 15);
 }
 
-function errorHandler(error, request, response) {
-  response.status(500).send(error);
-}
 
 
 
@@ -97,15 +92,16 @@ function eventsHandler(request, response) {
   try {
     const latitude = request.query.latitude;
     const longitude = request.query.longitude;
-    let eventurl = `http://api.eventful.com/json/events/search?app_key=${process.env.EVENTFUL_API_KEY}&keywords=books&where=${latitude},${longitude}&within=7&date=Future`
+    let eventurl = `http://api.eventful.com/json/events/search?app_key=${process.env.EVENTFUL_API_KEY}&keywords=books&where=${latitude},${longitude}&within=7&date=Future&page_size=20`;
     console.log(eventurl);
 
     superagent.get(eventurl)
       .then(data => {
         console.log('test');
         let obj = JSON.parse(data.text);
-
-        const eventsarray = obj.events.event.map(object => new Event(object));
+        let parsedObj = obj.events.event;
+        console.log(parsedObj);
+        let eventsarray = parsedObj.map(object => new Event(object));
         response.send(eventsarray);
       })
   } catch (error) {
@@ -113,14 +109,18 @@ function eventsHandler(request, response) {
   }
 }
 
+// Error Handler
+function errorHandler(error, request, response) {
+  response.status(500).send(error);
+}
 
 // constructor for events
 
 function Event(eventsObj) {
-  // this.link = eventsObj.events.event.url;
-  this.name = eventsObj.events.event.title;
-  this.event_date = eventsObj.events.event.start_time;
-  this.summary = eventsObj.events.event.description;
+  this.link = eventsObj.url;
+  this.name = eventsObj.title;
+  this.event_date = eventsObj.start_time;
+  this.summary = eventsObj.description;
 }
 
 // Ensure the server is listening for requests
