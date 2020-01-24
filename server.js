@@ -19,13 +19,13 @@ app.use(cors());
 app.get('/', (request, response) => {
   response.send('home page!!!!');
 });
-
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
 app.get('/events', eventsHandler);
 // app.get('/yelp', yelpHandler);
 // app.get('/movies', moviesHandler);
 
+// Location Functions
 function locationHandler(request, response) {
   try {
     // //Getting info for object
@@ -45,17 +45,15 @@ function locationHandler(request, response) {
   }
 }
 
-
 // Location Object Constructor
 function Location(city, geoData) {
-  // console.log('locationbuildobj');
   this.search_query = city;
   this.formatted_query = geoData.display_name;
   this.latitude = geoData.lat;
   this.longitude = geoData.lon;
 }
-
-//Route for weather
+// End Location Functions
+// Begin Weather Functions
 
 function weatherHandler(request, response) {
   try {
@@ -74,19 +72,15 @@ function weatherHandler(request, response) {
   }
 }
 
-
-//constructor for weather
-
+// Weather Object Constructor
 
 function Weather(weatherObj) {
   this.forecast = weatherObj.summary
   this.time = new Date(weatherObj.time *1000).toString().slice(0, 15);
 }
 
-
-
-
-// handler for events
+// End Weather Functions
+// Begin Events Functions
 
 function eventsHandler(request, response) {
   try {
@@ -114,14 +108,15 @@ function errorHandler(error, request, response) {
   response.status(500).send(error);
 }
 
-// constructor for events
-
+// Events Constructor
 function Event(eventsObj) {
   this.link = eventsObj.url;
   this.name = eventsObj.title;
   this.event_date = eventsObj.start_time;
   this.summary = eventsObj.description;
 }
+
+// End Events Functions
 
 // Ensure the server is listening for requests
 // ***This must be at the end of the file***
